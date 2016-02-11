@@ -22,21 +22,13 @@
 
 (defn navigate-to-prices-for [driver source target day]
   "Returns the driver."
-  (let [from (wd/find-element driver {:css "#from0"})
-        to (wd/find-element driver {:css "#to0"})
-        departure (wd/find-element driver {:css "span.departure-date input"})
-        time-elem (wd/find-element
-                    driver
-                    {:css "span.time select option[value='0']"})
-        submit (wd/find-element driver {:css "#fs-submit"})]
-
-    (send-wait-and-enter from source)
-    (send-wait-and-enter to target)
-    (wd/send-keys departure day)
-    (wd/click time-elem)
-    (wd/click submit)
-    (Thread/sleep 6000) ;; give it time to load; TODO make this cleaner
-    driver))
+  (send-wait-and-enter (find-css driver "#from0") source)
+  (send-wait-and-enter (find-css driver "#to0") target)
+  (wd/send-keys (find-css driver "span.departure-date input") day)
+  (wd/click (find-css driver "span.time select option[value='0']"))
+  (wd/click (find-css driver "#fs-submit"))
+  (Thread/sleep 6000) ;; give it time to load; TODO make this cleaner
+  driver)
 
 (defn parse-duration-to-minutes [dur]
   "Parses a natural language duration into an integer number of minutes."
@@ -69,12 +61,10 @@
         prices {:economy economy :comfort comfort :premiere premiere}]
     {:hops hops :prices prices}))
 
-(defn fetch-route-info [source target day]
+(defn fetch-route-info [driver source target day]
   "source and target should be city names. Day should be formatted like
   1/21/2016. The entry function."
-  (let [driver (-> (wd/start {:browser :chrome} request-url)
-                   (navigate-to-prices-for source target day))
-        result-elems (find-css-many driver "div.tiered-row.shadowbox")
+  (navigate-to-prices-for source target day)
+  (let [result-elems (find-css-many driver "div.tiered-row.shadowbox")
         trips (doall (map extract-trip-from-result-elem result-elems))] 
-    (wd/quit driver)
     {:date day :start source :end target :trips trips}))
