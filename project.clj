@@ -10,7 +10,9 @@
                  [clj-http "2.0.0"]
                  [org.seleniumhq.selenium/selenium-java "2.47.1"]
                  [org.seleniumhq.selenium/selenium-chrome-driver "2.48.2"] 
-                 [clj-webdriver "0.7.2"]]
+                 [clj-webdriver "0.7.2"]
+                 [com.taoensso/carmine "2.12.2"]
+                 [org.clojure/data.json "0.2.6"]]
   :main ^:skip-aot trainsanywhere.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

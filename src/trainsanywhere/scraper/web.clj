@@ -1,4 +1,4 @@
-(ns trainsanywhere.scraper
+(ns trainsanywhere.scraper.web
   (:require [clj-webdriver.core :as wd]
             [clj-webdriver.taxi :as taxi :only [find-elements]]))
 
@@ -21,13 +21,13 @@
   (taxi/find-elements driver {:css selector}))
 
 (defn navigate-to-prices-for [driver source target day]
-  "Returns the driver."
+  (wd/to driver request-url)
   (send-wait-and-enter (find-css driver "#from0") source)
   (send-wait-and-enter (find-css driver "#to0") target)
   (wd/send-keys (find-css driver "span.departure-date input") day)
   (wd/click (find-css driver "span.time select option[value='0']"))
   (wd/click (find-css driver "#fs-submit"))
-  (Thread/sleep 6000) ;; give it time to load; TODO make this cleaner
+  (Thread/sleep 10000) ;; give it time to load; TODO make this cleaner
   driver)
 
 (defn parse-duration-to-minutes [dur]
@@ -64,7 +64,7 @@
 (defn fetch-route-info [driver source target day]
   "source and target should be city names. Day should be formatted like
   1/21/2016. The entry function."
-  (navigate-to-prices-for source target day)
+  (navigate-to-prices-for driver source target day)
   (let [result-elems (find-css-many driver "div.tiered-row.shadowbox")
         trips (doall (map extract-trip-from-result-elem result-elems))] 
     {:date day :start source :end target :trips trips}))
