@@ -5,22 +5,16 @@
             [trainsanywhere.scraper.web :as web]))
 
 (defn run-scraper-worker [{message-id :mid message-raw :message}]
-  ;; deserialize from JSON
-  ;; make a driver
-  ;; grab trip info
-  ;; serialize to json and print
-  ;; kill driver
-  
   (println (str "Processing message " message-id "..."))
-  (let [message (json/read-str message-raw :key-fn keyword)
-        driver (wd/new-driver {:browser :chrome})
-        trip-info (web/fetch-route-info
+  (let [message (json/read-str message-raw :key-fn keyword) ;; deserialize
+        driver (wd/new-driver {:browser :chrome}) ;; make driver
+        trip-info (web/fetch-route-info ;; fetch trip info
                     driver
                     (:source message)
                     (:target message)
                     (:day message))]
-    (println (json/write-str trip-info))
-    (wd/quit driver)
+    (println (json/write-str trip-info)) ;; print
+    (wd/quit driver) ;; kill driver
     {:status :success}))
 
 (def main

@@ -10,12 +10,12 @@
   (Thread/sleep 1000)
   (wd/send-keys elem "\n"))
 
-(defn find-css [driver selector]
+(defn- find-css [driver selector]
   "Finds an element from a driver (or subelement from an element) given a CSS
   selector."
   (wd/find-element driver {:css selector}))
 
-(defn find-css-many [driver selector]
+(defn- find-css-many [driver selector]
   "Finds an element from a driver (or subelement from an element) given a CSS
   selector."
   (taxi/find-elements driver {:css selector}))

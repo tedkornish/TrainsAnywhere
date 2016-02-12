@@ -1,36 +1,10 @@
 # trainsanywhere
 
-FIXME: description
+## General architecture
 
-## Installation
+4 main services running:
 
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar trainsanywhere-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+* Many scraper instances pull requests for days and routes off a queue, scrape them, and insert into the DB
+* The scheduler figures out which dates need to be scraped and queues them up
+* The JSON API serves information about routes over HTTP, pulling out of the same DB the scrapers are talking to
+* The client talks to the JSON API

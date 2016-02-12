@@ -11,7 +11,8 @@
       str))
 
 (defn fetch-stations-page [n]
-  "Fetch a single page of stations from the Rail Europe API."
+  "Fetch a single page of stations from the Rail Europe API. Returns nil if no
+  page to fetch."
   (-> n
       url-for-station-page
       client/get
