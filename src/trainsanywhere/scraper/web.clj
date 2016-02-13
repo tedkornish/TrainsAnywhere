@@ -1,6 +1,7 @@
 (ns trainsanywhere.scraper.web
   (:require [clj-webdriver.core :as wd]
-            [clj-webdriver.taxi :as taxi :only [find-elements]]))
+            [clj-webdriver.taxi :as taxi :only [find-elements]]
+            [clojure.string :as str]))
 
 (def request-url
   "https://www2.raileurope.com/us/rail/point_to_point/triprequest.htm")
@@ -31,8 +32,10 @@
   driver)
 
 (defn parse-duration-to-minutes [dur]
-  "Parses a natural language duration into an integer number of minutes."
-  dur) ;; TODO
+  "Parses a string like 0hr55min or 1hr23min into a number of minutes."
+  (let [hrs-and-min-strings (-> dur (str/replace "min" "") (str/split #"hr"))
+        [hrs mins] (map read-string hrs-and-min-strings)]
+    (+ (* 60 hrs) mins)))
 
 (defn parse-hops [train-info]
   "Parse some hop objects out of a train info element."
