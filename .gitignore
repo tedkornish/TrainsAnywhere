@@ -12,3 +12,5 @@ target
 todo.txt
 
 .nrepl-port
+
+.lein-failures
