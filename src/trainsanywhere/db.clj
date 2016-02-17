@@ -14,8 +14,7 @@
 (korma.db/defdb postgres (korma.db/postgres postgresql-config))
 
 (defn- config-to-string [cfg]
-  (let [user-string (if-not (:user cfg) ""
-                      (str (:user cfg) ":" (:password cfg) "@"))
+  (let [user-string (str (:user cfg) ":" (:password cfg) "@")
         protocol "jdbc:postgresql://"]
     (str protocol user-string (:host cfg) ":" (:port cfg) "/" (:db cfg))))
 

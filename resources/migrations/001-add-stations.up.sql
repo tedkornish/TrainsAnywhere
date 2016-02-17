@@ -32,8 +32,8 @@ CREATE TABLE stations (
   name text NOT NULL,
   country_code text NOT NULL,
   native_name text NOT NULL,
-  longitude text,
-  latitude text
+  longitude double precision NOT NULL,
+  latitude double precision NOT NULL
 );
 
 --;;

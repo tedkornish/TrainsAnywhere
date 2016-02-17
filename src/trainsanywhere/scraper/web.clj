@@ -3,6 +3,9 @@
             [clj-webdriver.taxi :as taxi :only [find-elements]]
             [clojure.string :as str]))
 
+;;;; This file contains utilities for scraping trip and hop data out of the
+;;;; Rail Europe website.
+
 (def request-url
   "https://www2.raileurope.com/us/rail/point_to_point/triprequest.htm")
 
