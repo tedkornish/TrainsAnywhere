@@ -1,0 +1,15 @@
+DROP TRIGGER IF EXISTS trips_insert ON trips;;
+--;;
+DROP TRIGGER IF EXISTS trips_update ON trips;
+--;;
+DROP TRIGGER IF EXISTS hops_insert ON hops;
+--;;
+DROP TRIGGER IF EXISTS hops_update ON hops;
+--;;
+DROP TABLE hops;
+--;;
+DROP TABLE trips;
+--;;
+DROP SEQUENCE trip_ids;
+--;;
+DROP SEQUENCE hop_ids;
