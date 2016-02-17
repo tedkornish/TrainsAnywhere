@@ -14,8 +14,9 @@
                  [com.taoensso/carmine "2.12.2"]
                  [org.clojure/data.json "0.2.6"]
                  [ragtime "0.5.2"]
-                 [org.clojure/java.jdbc "0.4.2"]
-                 [org.postgresql/postgresql "9.4.1207"]]
+                 [org.clojure/java.jdbc "0.3.7"] ;; korma depends 0.3.7
+                 [org.postgresql/postgresql "9.4.1207"]
+                 [korma "0.4.2"]]
   :aliases {"migrate" ["run" "-m" "trainsanywhere.db/migrate"]
             "rollback" ["run" "-m" "trainsanywhere.db/rollback"]}
   :main ^:skip-aot trainsanywhere.core
