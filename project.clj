@@ -18,7 +18,8 @@
                  [org.postgresql/postgresql "9.4.1207"]
                  [korma "0.4.2"]]
   :aliases {"migrate" ["run" "-m" "trainsanywhere.db/migrate"]
-            "rollback" ["run" "-m" "trainsanywhere.db/rollback"]}
+            "rollback" ["run" "-m" "trainsanywhere.db/rollback"]
+            "populate-stations" ["run" "-m" "trainsanywhere.rail-europe-api/fetch-and-insert-all-stations"]}
   :main ^:skip-aot trainsanywhere.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
