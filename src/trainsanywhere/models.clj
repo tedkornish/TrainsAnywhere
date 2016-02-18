@@ -15,3 +15,7 @@
   (core/has-many hops))
 
 (core/defentity routes)
+
+;; A view of routes filtered and sorted by priority for fetching. 
+(core/defentity routes-pending-fetches
+  (core/table :routes_pending_fetches))

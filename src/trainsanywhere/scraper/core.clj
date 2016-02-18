@@ -10,9 +10,9 @@
         driver (wd/new-driver {:browser :chrome}) ;; make driver
         trip-info (web/fetch-route-info ;; fetch trip info
                     driver
-                    (:source message)
-                    (:target message)
-                    (:day message))]
+                    (:source-name message)
+                    (:target-name message)
+                    (:day-str message))]
     (println (json/write-str trip-info)) ;; print
     (wd/quit driver) ;; kill driver
     {:status :success}))

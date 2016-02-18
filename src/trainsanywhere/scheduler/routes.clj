@@ -1,6 +1,6 @@
 (ns trainsanywhere.scheduler.routes
   (:require [trainsanywhere.scheduler.config :as config]
-            [korma.core :refer [select order limit insert values dry-run]]
+            [korma.core :refer [select order limit insert values]]
             [trainsanywhere.models :refer [stations routes]]
             [clj-time.core :as t]
             [clj-time.periodic :as p]
