@@ -16,10 +16,15 @@
                  [org.postgresql/postgresql "9.4.1207"]
                  [korma "0.4.2"]
                  [clj-time "0.11.0"]
-                 [prismatic/schema "1.0.5"]]
+                 [prismatic/schema "1.0.5"]
+                 [com.codeborne/phantomjsdriver "1.2.1"
+                    :exclusion [org.seleniumhq.selenium/selenium-java
+                                org.seleniumhq.selenium/selenium-server
+                                org.seleniumhq.selenium/selenium-remote-driver]]]
   :aliases {"migrate" ["run" "-m" "trainsanywhere.db/migrate"]
             "rollback" ["run" "-m" "trainsanywhere.db/rollback"]
             "seed-stations" ["run" "-m" "trainsanywhere.rail-europe-api/fetch-and-insert-all-stations"]}
   :main ^:skip-aot trainsanywhere.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+             :scraper {:main trainsanywhere.scraper.core}})

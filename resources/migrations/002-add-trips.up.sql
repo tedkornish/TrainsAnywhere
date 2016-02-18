@@ -4,9 +4,9 @@ CREATE TABLE trips (
   updated_at timestamp NOT NULL,
   origin_station_id bigint REFERENCES stations(id),
   destination_station_id bigint REFERENCES stations(id),
-  price_economy_dollars money,
-  price_comfort_dollars money,
-  price_premier_dollars money
+  price_economy_dollars numeric,
+  price_comfort_dollars numeric,
+  price_premier_dollars numeric
 );
 
 --;;

@@ -57,6 +57,15 @@
                    (clojure.string/replace "\n" "")
                    parse-duration-to-minutes)}))
 
+(defn- map-function-on-map-vals
+  "Applies a given function to every value in a map."
+  [m f]
+  (apply merge (map (fn [[k v]] {k (f v)}) m)))
+
+(defn- dollars-to-number [dollar-string]
+  (if-not (nil? dollar-string)
+    (read-string (str/replace dollar-string "$" ""))))
+
 (defn extract-trip-from-result-elem
   "Given a result element, parse train info, prices, and hops and layovers out
   of the element's DOM."
@@ -70,7 +79,8 @@
                ;; even indices are hops, odd are layovers 
                (map parse-hops (take-nth 2 hop-elems))) 
         prices {:economy economy :comfort comfort :premiere premiere}]
-    {:hops hops :prices prices}))
+    {:hops hops :prices (map-function-on-map-vals prices dollars-to-number)}))
+
 
 (defn fetch-route-info
   "Day should be formatted like 1/21/2016."

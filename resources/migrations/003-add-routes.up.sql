@@ -93,6 +93,7 @@ CREATE VIEW routes_pending_fetches AS
       FROM stations
     )
   SELECT
+    combined_routes.id,
     origin_station_id,
     destination_station_id,
     date,
