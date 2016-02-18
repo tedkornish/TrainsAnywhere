@@ -2,9 +2,17 @@ CREATE TABLE routes (
   id bigint PRIMARY KEY,
   created_at timestamp NOT NULL,
   updated_at timestamp NOT NULL,
+
+  -- These three columns form the unique identity of the route
   origin_station_id bigint REFERENCES stations(id),
   destination_station_id bigint REFERENCES stations(id),
   date date,
+
+  -- This can be "fetched", "fetching" (which includes being queued) or "waiting"
+  fetch_status text NOT NULL DEFAULT 'waiting',
+  -- if this is NULL, never been fetched
+  last_fetched_at timestamp, 
+
   UNIQUE (origin_station_id, destination_station_id, date)
 );
 

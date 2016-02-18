@@ -1,4 +1,4 @@
-(ns trainsanywhere.scraper.worker
+(ns trainsanywhere.scraper.core
   (:require [taoensso.carmine.message-queue :as car-mq]
             [clojure.data.json :as json]
             [clj-webdriver.core :as wd]

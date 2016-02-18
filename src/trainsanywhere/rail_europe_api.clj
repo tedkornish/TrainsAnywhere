@@ -8,8 +8,9 @@
             [clojure.string :as string]
             [clojure.set :refer [rename-keys]]))
 
-(defn url-for-station-page [n]
+(defn url-for-station-page
   "Assemble the URL for fetching a page of stations from the Rail Europe API."
+  [n]
   (-> (url "https://www2.raileurope.com/us/shopping/popular-locations.htm?")
       (assoc :query {:batchSize 20 :batchNr n})
       str))
@@ -21,10 +22,11 @@
        (map string/capitalize)
        string/join))
 
-(defn- call-function-for-keys [maps keys f]
+(defn- call-function-for-keys
   "Given a sequence of maps, a sequence of keys, and a unary function which
   return a single value, call-function-for-keys will call the given function `f`
   for the values of each of the `keys` for each map in `maps`."
+  [maps keys f] 
   (loop [current-maps maps
          remaining-keys keys]
     (let [current-key (first remaining-keys)
@@ -34,14 +36,16 @@
           (map update-fn current-maps)
           (rest remaining-keys))))))
 
-(defn- swap-map [seq f]
+(defn- swap-map
   "swap-map is map, but with arguments reversed. Useful when passing a list
   through the -> macro."
+  [seq f] 
   (map f seq))
 
-(defn fetch-stations-page [n]
+(defn fetch-stations-page
   "Fetch a single page of stations from the Rail Europe API. Returns nil if no
   page to fetch."
+  [n] 
   (println (str "Fetching page " n))
   (-> n
       url-for-station-page
@@ -53,8 +57,9 @@
       (call-function-for-keys [:name :native_name] capitalize-words)
       (swap-map #(rename-keys % {:id :station_id}))))
 
-(defn fetch-all-stations []
+(defn fetch-all-stations
   "Fetch all stations before returning them in a list. Does not write to DB."
+  [] 
   (loop [stations []
          current-page 1]
     (let [page (fetch-stations-page current-page)]

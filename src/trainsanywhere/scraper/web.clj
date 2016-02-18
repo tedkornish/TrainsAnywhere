@@ -14,14 +14,16 @@
   (Thread/sleep 1000)
   (wd/send-keys elem "\n"))
 
-(defn- find-css [driver selector]
+(defn- find-css
   "Finds an element from a driver (or subelement from an element) given a CSS
   selector."
+  [driver selector] 
   (wd/find-element driver {:css selector}))
 
-(defn- find-css-many [driver selector]
+(defn- find-css-many
   "Finds an element from a driver (or subelement from an element) given a CSS
   selector."
+  [driver selector] 
   (taxi/find-elements driver {:css selector}))
 
 (defn navigate-to-prices-for [driver source target day]
@@ -34,14 +36,16 @@
   (Thread/sleep 10000) ;; give it time to load; TODO make this cleaner
   driver)
 
-(defn parse-duration-to-minutes [dur]
+(defn parse-duration-to-minutes
   "Parses a string like 0hr55min or 1hr23min into a number of minutes."
+  [dur] 
   (let [hrs-and-min-strings (-> dur (str/replace "min" "") (str/split #"hr"))
         [hrs mins] (map read-string hrs-and-min-strings)]
     (+ (* 60 hrs) mins)))
 
-(defn parse-hops [train-info]
+(defn parse-hops
   "Parse some hop objects out of a train info element."
+  [train-info] 
   (let [departure-elem (find-css train-info ".be-train-info .be-depart-col")
         arrival-elem (find-css train-info ".be-train-info .be-arrive-col")]
     {:departure-time (wd/text (find-css departure-elem ".time"))
@@ -53,9 +57,10 @@
                    (clojure.string/replace "\n" "")
                    parse-duration-to-minutes)}))
 
-(defn extract-trip-from-result-elem [elem]
+(defn extract-trip-from-result-elem
   "Given a result element, parse train info, prices, and hops and layovers out
   of the element's DOM."
+  [elem] 
   (let [train-info (find-css elem ".be-train-info")
         price-elems (find-css-many elem ".tiered-tabs span.price")
         [economy comfort premiere] (map wd/text price-elems)
@@ -67,9 +72,10 @@
         prices {:economy economy :comfort comfort :premiere premiere}]
     {:hops hops :prices prices}))
 
-(defn fetch-route-info [driver source target day]
+(defn fetch-route-info
   "source and target should be city names. Day should be formatted like
   1/21/2016. The entry function."
+  [driver source target day] 
   (navigate-to-prices-for driver source target day)
   (let [result-elems (find-css-many driver "div.tiered-row.shadowbox")
         trips (doall (map extract-trip-from-result-elem result-elems))] 
