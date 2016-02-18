@@ -33,7 +33,7 @@ CREATE TABLE hops (
   id bigint PRIMARY KEY,
   created_at timestamp NOT NULL,
   updated_at timestamp NOT NULL,
-  trip_id bigint REFERENCES trips(id),
+  trip_id bigint REFERENCES trips(id) ON DELETE CASCADE,
   origin_station_name text NOT NULL,
   destination_station_name text NOT NULL,
   departure_time timestamp NOT NULL,

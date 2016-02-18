@@ -1,4 +1,4 @@
-(ns trainsanywhere.scheduler
+(ns trainsanywhere.scheduler.core
   (:require [clojure.data.json :as json]
             [taoensso.carmine.message-queue :as car-mq]
             [taoensso.carmine :as car]

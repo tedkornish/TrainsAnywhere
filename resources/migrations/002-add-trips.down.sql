@@ -1,4 +1,4 @@
-DROP TRIGGER IF EXISTS trips_insert ON trips;;
+DROP TRIGGER IF EXISTS trips_insert ON trips;
 --;;
 DROP TRIGGER IF EXISTS trips_update ON trips;
 --;;
