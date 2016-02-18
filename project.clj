@@ -20,11 +20,14 @@
                  [com.codeborne/phantomjsdriver "1.2.1"
                     :exclusion [org.seleniumhq.selenium/selenium-java
                                 org.seleniumhq.selenium/selenium-server
-                                org.seleniumhq.selenium/selenium-remote-driver]]]
+                                org.seleniumhq.selenium/selenium-remote-driver]]
+                 [clojurewerkz/quartzite "2.0.0"]]
   :aliases {"migrate" ["run" "-m" "trainsanywhere.db/migrate"]
             "rollback" ["run" "-m" "trainsanywhere.db/rollback"]
             "seed-stations" ["run" "-m" "trainsanywhere.rail-europe-api/fetch-and-insert-all-stations"]}
   :main ^:skip-aot trainsanywhere.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
-             :scraper {:main trainsanywhere.scraper.core}})
+             :scraper {:main trainsanywhere.scraper.core}
+             :scheduler {:main trainsanywhere.scheduler.core}
+             :persistence {:main trainsanywhere.persistence.core}})

@@ -83,14 +83,6 @@ CREATE VIEW routes_pending_fetches AS
       FROM t1
       UNION (SELECT * FROM t2)
       UNION (SELECT * FROM t3)
-    ),
-    origins AS (
-      SELECT *
-      FROM stations
-    ),
-    destinations AS (
-      SELECT *
-      FROM stations
     )
   SELECT
     combined_routes.id,
@@ -100,6 +92,6 @@ CREATE VIEW routes_pending_fetches AS
     origins.name origin_station_name,
     destinations.name destination_station_name
   FROM combined_routes
-  JOIN origins ON combined_routes.origin_station_id = origins.id
-  JOIN destinations ON combined_routes.destination_station_id = destinations.id
+  JOIN (SELECT * FROM stations) origins ON combined_routes.origin_station_id = origins.id
+  JOIN (SELECT * FROM stations) destinations ON combined_routes.destination_station_id = destinations.id
   ORDER BY ord, date, origin_station_id, destination_station_id ASC NULLS FIRST;

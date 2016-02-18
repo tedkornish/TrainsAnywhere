@@ -81,7 +81,6 @@
         prices {:economy economy :comfort comfort :premiere premiere}]
     {:hops hops :prices (map-function-on-map-vals prices dollars-to-number)}))
 
-
 (defn fetch-route-info
   "Day should be formatted like 1/21/2016."
   [driver {source :source-name target :target-name day :day-str :as orig}]

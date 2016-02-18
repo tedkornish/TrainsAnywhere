@@ -1,18 +1,22 @@
 (ns trainsanywhere.scraper.core
   (:require [taoensso.carmine.message-queue :as car-mq]
+            [taoensso.carmine :as car]
             [clojure.data.json :as json]
             [clj-webdriver.core :as wd]
             [trainsanywhere.scraper.web :as web]
             [trainsanywhere.scraper.data :as data]))
 
+(def driver (wd/new-driver {:browser :phantomjs})) ;; make driver
+
 (defn run-scraper-worker [{message-id :mid message-raw :message}]
   (println (str "Processing message " message-id "..."))
   (let [message (json/read-str message-raw :key-fn keyword) ;; deserialize
-        driver (wd/new-driver {:browser :phantomjs}) ;; make driver
         trip-info (web/fetch-route-info driver message)]
-    (data/persist-nested-models (data/scraped-data-to-nested-models trip-info))
-    (wd/quit driver) ;; kill driver
+    (enqueue trip-info)
     {:status :success}))
 
 (defn -main []
   (car-mq/worker {} "to-scrape" {:handler run-scraper-worker}))
+
+(defn enqueue [scraped-data]
+  (car/wcar {} (car-mq/enqueue "to-write" (json/write-str scraped-data))))

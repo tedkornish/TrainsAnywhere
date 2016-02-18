@@ -1,10 +1,10 @@
-(ns trainsanywhere.scraper.data
+(ns trainsanywhere.persistence.data
   (:require [schema.core :as s]
             [korma.core :refer [insert values]]
-            [trainsanywhere.models :refer [trips hops]]))
+            [trainsanywhere.models :refer [trips hops]])) 
 
-;;;; This file contains utilities for turning the structured data that we scrape
-;;;; from the website into relational models for persistence in Postgres.
+;;;; Utilities for formatting and persisting data scraped from the Rail Europe
+;;;; website.
 
 (def ScrapedData
   "A schema for data scraped from the Rail Europe website."
@@ -53,10 +53,13 @@
   "Turns data satisfying ScrapedData (above) into data satisfying NestedModels
   for insertion into the database."
   [scraped-data]
+  {:pre [(s/validate ScrapedData scraped-data)]
+   :post [(s/validate NestedModels %)]}
   (map #(sanitize-scraped-trip % (:original scraped-data))
        (:trips scraped-data)))
 
 (defn persist-nested-models [nested-models]
+  {:pre [(s/validate NestedModels nested-models)]}
   (doseq [trip nested-models] ;; insert each trip
     (let [inserted (insert trips (values (:trip trip)))]
       (doseq [child (:hops trip)] ;; grab the trip_id and insert all hops
