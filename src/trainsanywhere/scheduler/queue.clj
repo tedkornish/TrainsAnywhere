@@ -17,11 +17,12 @@
                                (c/from-sql-date)
                                (f/unparse queue-date-formatter))
                  :source-name (:origin_station_name route)
-                 :target-name (:destination_station_name route)}]
+                 :target-name (:destination_station_name route)
+                 :route-id (:id route)}]
     (car/wcar {} (car-mq/enqueue "to-scrape" (json/write-str message)))))
 
-(defn top-pending-routes []
-  (select routes-pending-fetches (limit 10000)))
+(defn top-pending-routes [n]
+  (select routes-pending-fetches (limit n)))
 
 (defn update-to-fetching [route]
   (update routes
@@ -29,7 +30,7 @@
                        :last_fetch_queued_at (c/to-sql-date (t/now))})
           (where {:id (:id route)})))
 
-(defn enqueue-top-pending-routes []
-  (doseq [r (top-pending-routes)]
+(defn enqueue-top-pending-routes [n]
+  (doseq [r (top-pending-routes n)]
     (update-to-fetching r)
     (enqueue r)))

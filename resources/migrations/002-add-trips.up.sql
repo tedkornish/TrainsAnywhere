@@ -36,8 +36,8 @@ CREATE TABLE hops (
   trip_id bigint REFERENCES trips(id) ON DELETE CASCADE,
   origin_station_name text NOT NULL,
   destination_station_name text NOT NULL,
-  departure_time timestamp NOT NULL,
-  arrival_time timestamp NOT NULL,
+  departure_time_string text NOT NULL,
+  arrival_time_string text NOT NULL,
   duration_minutes integer CHECK (duration_minutes > 0)
 );
 

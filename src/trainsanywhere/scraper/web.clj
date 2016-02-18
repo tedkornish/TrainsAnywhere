@@ -73,10 +73,9 @@
     {:hops hops :prices prices}))
 
 (defn fetch-route-info
-  "source and target should be city names. Day should be formatted like
-  1/21/2016. The entry function."
-  [driver source target day] 
+  "Day should be formatted like 1/21/2016."
+  [driver {source :source-name target :target-name day :day-str :as orig}]
   (navigate-to-prices-for driver source target day)
   (let [result-elems (find-css-many driver "div.tiered-row.shadowbox")
         trips (doall (map extract-trip-from-result-elem result-elems))] 
-    {:date day :start source :end target :trips trips}))
+    {:original orig :trips trips}))

@@ -8,11 +8,7 @@
   (println (str "Processing message " message-id "..."))
   (let [message (json/read-str message-raw :key-fn keyword) ;; deserialize
         driver (wd/new-driver {:browser :chrome}) ;; make driver
-        trip-info (web/fetch-route-info ;; fetch trip info
-                    driver
-                    (:source-name message)
-                    (:target-name message)
-                    (:day-str message))]
+        trip-info (web/fetch-route-info driver message)]
     (println (json/write-str trip-info)) ;; print
     (wd/quit driver) ;; kill driver
     {:status :success}))
