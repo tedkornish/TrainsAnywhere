@@ -3,10 +3,12 @@
             [taoensso.carmine :as car]
             [clojure.data.json :as json]
             [clj-webdriver.core :as wd]
-            [trainsanywhere.scraper.web :as web]
-            [trainsanywhere.scraper.data :as data]))
+            [trainsanywhere.scraper.web :as web]))
 
-(def driver (wd/new-driver {:browser :phantomjs})) ;; make driver
+(def driver (wd/new-driver {:browser :chrome})) ;; make driver
+
+(defn enqueue [scraped-data]
+  (car/wcar {} (car-mq/enqueue "to-write" (json/write-str scraped-data))))
 
 (defn run-scraper-worker [{message-id :mid message-raw :message}]
   (println (str "Processing message " message-id "..."))
@@ -16,7 +18,6 @@
     {:status :success}))
 
 (defn -main []
-  (car-mq/worker {} "to-scrape" {:handler run-scraper-worker}))
-
-(defn enqueue [scraped-data]
-  (car/wcar {} (car-mq/enqueue "to-write" (json/write-str scraped-data))))
+  (car-mq/worker {} "to-scrape" {:handler run-scraper-worker
+                                 :eoq-backoff-ms (constantly 10)
+                                 :throttle-ms 10}))

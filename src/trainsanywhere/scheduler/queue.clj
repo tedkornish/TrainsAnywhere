@@ -31,7 +31,7 @@
           (where {:id (:id route)})))
 
 (defn num-pending-items []
-  (count (:messages (queue-status {} "to-scrape"))))
+  (count (:messages (car-mq/queue-status {} "to-scrape"))))
 
 (defn enqueue-top-pending-routes [n]
   (doseq [r (top-pending-routes n)]
@@ -41,11 +41,12 @@
 (defn queue-task-handler
   "The cronj handler for queueing pending routes."
   [t opts]
-  (if (> 5000 (num-pending-items))
-    (enqueue-top-pending-routes 10000)))
+  (if (> 500 (num-pending-items))
+    (println "Queueing routes for fetching...")
+    (enqueue-top-pending-routes 500)))
 
 (def queue-task
-  "The cronj task which runs every 5 minutes."
+  "The cronj task which runs every minute."
   {:id "queue-task"
    :handler queue-task-handler
-   :schedule "*/5 * * * *"})
+   :schedule "* /1 * * * *"})

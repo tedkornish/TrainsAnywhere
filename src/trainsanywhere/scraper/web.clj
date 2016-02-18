@@ -9,10 +9,15 @@
 (def request-url
   "https://www2.raileurope.com/us/rail/point_to_point/triprequest.htm")
 
-(defn- send-wait-and-enter [elem text]
+(defn- clear-send-wait-and-enter [elem text]
+  (wd/clear elem)
   (wd/send-keys elem text)
   (Thread/sleep 1000)
   (wd/send-keys elem "\n"))
+
+(defn- clear-and-send [elem text]
+  (wd/clear elem)
+  (wd/send-keys elem text))
 
 (defn- find-css
   "Finds an element from a driver (or subelement from an element) given a CSS
@@ -28,9 +33,9 @@
 
 (defn navigate-to-prices-for [driver source target day]
   (wd/to driver request-url)
-  (send-wait-and-enter (find-css driver "#from0") source)
-  (send-wait-and-enter (find-css driver "#to0") target)
-  (wd/send-keys (find-css driver "span.departure-date input") day)
+  (clear-send-wait-and-enter (find-css driver "#from0") source)
+  (clear-send-wait-and-enter (find-css driver "#to0") target)
+  (clear-and-send (find-css driver "#deptDate0") day)
   (wd/click (find-css driver "span.time select option[value='0']"))
   (wd/click (find-css driver "#fs-submit"))
   (Thread/sleep 10000) ;; give it time to load; TODO make this cleaner

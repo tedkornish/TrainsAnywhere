@@ -53,13 +53,13 @@
   "Turns data satisfying ScrapedData (above) into data satisfying NestedModels
   for insertion into the database."
   [scraped-data]
-  {:pre [(s/validate ScrapedData scraped-data)]
-   :post [(s/validate NestedModels %)]}
+  ;{:pre [(s/validate ScrapedData scraped-data)]
+   ;:post [(s/validate NestedModels %)]}
   (map #(sanitize-scraped-trip % (:original scraped-data))
        (:trips scraped-data)))
 
 (defn persist-nested-models [nested-models]
-  {:pre [(s/validate NestedModels nested-models)]}
+  ;{:pre [(s/validate NestedModels nested-models)]}
   (doseq [trip nested-models] ;; insert each trip
     (let [inserted (insert trips (values (:trip trip)))]
       (doseq [child (:hops trip)] ;; grab the trip_id and insert all hops

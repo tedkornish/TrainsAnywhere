@@ -1,6 +1,6 @@
 (ns trainsanywhere.scheduler.routes
   (:require [trainsanywhere.scheduler.config :as config]
-            [korma.core :refer [select order limit insert values]]
+            [korma.core :refer [select order limit insert values aggregate]]
             [trainsanywhere.models :refer [stations routes]]
             [clj-time.core :as t]
             [clj-time.periodic :as p]
@@ -41,15 +41,26 @@
   [t opts]
   (insert-routes))
 
+(defn num-routes []
+  (-> (select routes (aggregate (count :*) :cnt))
+      (first)
+      (:cnt)))
+
+(defn no-routes?
+  "Returns true if 0 routes in the routes table."
+  []
+  (== 0 (num-routes)))
+
 (def routes-task
   "The cronj task which runs every Sunday. We'll also manually insert routes on
   startup if there are no routes."
   {:id "routes-task"
    :handler routes-task-handler
-   :schedule "0 0 * * 0" ;; run every Sunday
+   :schedule "0 0 0 * * 0" ;; run every Sunday at midnight
    :pre-hook (fn [dt opts]
                (println "Starting to insert routes..."))
    :post-hook (fn [dt opts]
-                (let [num-routes (select routes (aggregate (count :*) :cnt))]
-                  (println "Finished inserting routes. Total number of routes:"
-                           (:cnt num-routes))))})
+                (let [num-routes (num-routes)]
+                  (println
+                    "Finished inserting routes. Total number of routes:"
+                    num-routes)))})

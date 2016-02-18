@@ -94,4 +94,5 @@ CREATE VIEW routes_pending_fetches AS
   FROM combined_routes
   JOIN (SELECT * FROM stations) origins ON combined_routes.origin_station_id = origins.id
   JOIN (SELECT * FROM stations) destinations ON combined_routes.destination_station_id = destinations.id
+  WHERE date >= current_date
   ORDER BY ord, date, origin_station_id, destination_station_id ASC NULLS FIRST;

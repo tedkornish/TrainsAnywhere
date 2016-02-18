@@ -10,4 +10,6 @@
     {:status :success}))
 
 (defn -main []
-  (car-mq/worker {} "to-write" {:handler run-persistence-worker}))
+  (car-mq/worker {} "to-write" {:handler run-persistence-worker
+                                :eoq-backoff-ms (constantly 10)
+                                :throttle-ms 10}))
