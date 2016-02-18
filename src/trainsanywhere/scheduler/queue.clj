@@ -30,7 +30,22 @@
                        :last_fetch_queued_at (c/to-sql-date (t/now))})
           (where {:id (:id route)})))
 
+(defn num-pending-items []
+  (count (:messages (queue-status {} "to-scrape"))))
+
 (defn enqueue-top-pending-routes [n]
   (doseq [r (top-pending-routes n)]
     (update-to-fetching r)
     (enqueue r)))
+
+(defn queue-task-handler
+  "The cronj handler for queueing pending routes."
+  [t opts]
+  (if (> 5000 (num-pending-items))
+    (enqueue-top-pending-routes 10000)))
+
+(def queue-task
+  "The cronj task which runs every 5 minutes."
+  {:id "queue-task"
+   :handler queue-task-handler
+   :schedule "*/5 * * * *"})

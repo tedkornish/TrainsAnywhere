@@ -21,7 +21,7 @@
                     :exclusion [org.seleniumhq.selenium/selenium-java
                                 org.seleniumhq.selenium/selenium-server
                                 org.seleniumhq.selenium/selenium-remote-driver]]
-                 [clojurewerkz/quartzite "2.0.0"]]
+                 [im.chit/cronj "1.4.4"]]
   :aliases {"migrate" ["run" "-m" "trainsanywhere.db/migrate"]
             "rollback" ["run" "-m" "trainsanywhere.db/rollback"]
             "seed-stations" ["run" "-m" "trainsanywhere.rail-europe-api/fetch-and-insert-all-stations"]}

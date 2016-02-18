@@ -35,3 +35,21 @@
           (if-not
             (.contains (str e) "duplicate")
             (throw (Exception. e))))))))
+
+(defn routes-task-handler
+  "The cronj handler for inserting routes periodically."
+  [t opts]
+  (insert-routes))
+
+(def routes-task
+  "The cronj task which runs every Sunday. We'll also manually insert routes on
+  startup if there are no routes."
+  {:id "routes-task"
+   :handler routes-task-handler
+   :schedule "0 0 * * 0" ;; run every Sunday
+   :pre-hook (fn [dt opts]
+               (println "Starting to insert routes..."))
+   :post-hook (fn [dt opts]
+                (let [num-routes (select routes (aggregate (count :*) :cnt))]
+                  (println "Finished inserting routes. Total number of routes:"
+                           (:cnt num-routes))))})
