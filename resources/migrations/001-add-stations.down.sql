@@ -1,20 +1,11 @@
-DROP TRIGGER stations_insert ON stations;
-
+DROP TRIGGER IF EXISTS stations_insert ON stations;
 --;;
-
-DROP TRIGGER stations_update ON stations;
-
+DROP TRIGGER IF EXISTS stations_update ON stations;
 --;;
-
-DROP TABLE stations;
-
+DROP TABLE IF EXISTS stations CASCADE;
 --;;
-
-DROP SEQUENCE station_ids;
+DROP SEQUENCE IF EXISTS station_ids;
 --;;
-
-DROP FUNCTION on_record_insert();
-
+DROP FUNCTION on_record_insert() CASCADE;
 --;;
-
-DROP FUNCTION on_record_update();
+DROP FUNCTION on_record_update() CASCADE;

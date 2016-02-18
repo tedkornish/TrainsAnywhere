@@ -8,10 +8,10 @@ CREATE TABLE routes (
   destination_station_id bigint REFERENCES stations(id),
   date date,
 
-  -- This can be "fetched", "fetching" (which includes being queued) or "waiting"
+  -- This "fetching" (which includes being queued) or "waiting"
   fetch_status text NOT NULL DEFAULT 'waiting',
   -- if this is NULL, never been fetched
-  last_fetched_at timestamp, 
+  last_fetch_queued_at timestamp, 
 
   UNIQUE (origin_station_id, destination_station_id, date),
   CHECK (origin_station_id <> destination_station_id)
@@ -40,4 +40,46 @@ CREATE TRIGGER routes_update
 ALTER TABLE trips
   DROP COLUMN origin_station_id,
   DROP COLUMN destination_station_id,
-  ADD COLUMN route_id bigint REFERENCES routes(id) ON DELETE CASCADE
+  ADD COLUMN route_id bigint REFERENCES routes(id) ON DELETE CASCADE;
+
+--;;
+
+CREATE VIEW routes_pending_fetches AS
+  WITH
+    t1 AS (
+      SELECT *, 0 AS ord
+      FROM routes
+      WHERE fetch_status = 'waiting'
+      AND date < current_date + '7 days'::interval
+      AND (
+        last_fetch_queued_at IS NULL OR
+        last_fetch_queued_at < current_date - '6 hours'::interval
+      )
+    ),
+    t2 AS (
+      SELECT *, 1 AS ord
+      FROM routes
+      WHERE fetch_status = 'waiting'
+      AND date < current_date + '31 days'::interval
+      AND date > current_date + '7 days'::interval
+      AND (
+        last_fetch_queued_at IS NULL OR
+        last_fetch_queued_at < current_date - '1 day'::interval
+      )
+    ),
+    t3 AS (
+      SELECT *, 2 AS ord
+      FROM routes
+      WHERE fetch_status = 'waiting'
+      AND date < current_date + '120 days'::interval
+      AND date > current_date + '31 days'::interval
+      AND (
+        last_fetch_queued_at IS NULL OR
+        last_fetch_queued_at < current_date - '7 days'::interval
+      )
+    )
+  SELECT *
+  FROM t1
+  UNION (SELECT * FROM t2)
+  UNION (SELECT * FROM t3)
+  ORDER BY ord, date, origin_station_id, destination_station_id ASC;
