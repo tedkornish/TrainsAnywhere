@@ -13,7 +13,8 @@ CREATE TABLE routes (
   -- if this is NULL, never been fetched
   last_fetched_at timestamp, 
 
-  UNIQUE (origin_station_id, destination_station_id, date)
+  UNIQUE (origin_station_id, destination_station_id, date),
+  CHECK (origin_station_id <> destination_station_id)
 );
 
 --;;
@@ -30,7 +31,7 @@ CREATE TRIGGER routes_insert
 --;;
 
 CREATE TRIGGER routes_update
-  BEFORE UPDATE ON trips
+  BEFORE UPDATE ON routes
   FOR EACH ROW
   EXECUTE PROCEDURE on_record_update();
 

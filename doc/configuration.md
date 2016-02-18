@@ -14,4 +14,4 @@ At start-time, each Clojure process which needs to talk to Postgres will read Po
 
 ## Scheduler config
 
-The scheduler figures out how many stations to use in its pairwise route creation by looking at the `TA_NUM_STATIONS` variable, which should be an integer equal to or greater than 2. Default `120`.
+The scheduler figures out how many stations to use in its pairwise route creation by looking at the `TA_NUM_STATIONS` variable, which should be an integer equal to or greater than 2. Required.

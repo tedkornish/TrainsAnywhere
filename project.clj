@@ -16,7 +16,8 @@
                  [ragtime "0.5.2"]
                  [org.clojure/java.jdbc "0.3.7"] ;; korma depends 0.3.7
                  [org.postgresql/postgresql "9.4.1207"]
-                 [korma "0.4.2"]]
+                 [korma "0.4.2"]
+                 [clj-time "0.11.0"]]
   :aliases {"migrate" ["run" "-m" "trainsanywhere.db/migrate"]
             "rollback" ["run" "-m" "trainsanywhere.db/rollback"]
             "seed-stations" ["run" "-m" "trainsanywhere.rail-europe-api/fetch-and-insert-all-stations"]}

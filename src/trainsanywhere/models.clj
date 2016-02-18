@@ -13,3 +13,5 @@
 ;; joining on the same table twice.
 (core/defentity trips
   (core/has-many hops))
+
+(core/defentity routes)
