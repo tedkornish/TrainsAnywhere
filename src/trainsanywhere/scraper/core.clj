@@ -15,6 +15,7 @@
   (let [message (json/read-str message-raw :key-fn keyword) ;; deserialize
         trip-info (web/fetch-route-info driver message)]
     (enqueue trip-info)
+    (println trip-info)
     {:status :success}))
 
 (defn -main []
