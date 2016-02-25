@@ -1,5 +1,7 @@
 # TrainsAnywhere
 
+> **IMPORTANT NOTE**: This project has been discontinued because it violates the Rail Europe robots.txt to scrape information from their website. I'm open-sourcing the code for public perusal, but don't endorse deployment of this code nor scraping of the Rail Europe website. This was a fun foray into Clojure.
+
 A travel discovery site which scrapes train times and prices from the Rail Europe website. See the `docs` folder for more specific topics.
 
 ## Database connection & migration
